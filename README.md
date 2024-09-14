@@ -80,9 +80,8 @@ cislo_okrsku,nazev_okrsku,volici,vydane_obalky,platne_hlasy,Strana A,Strana B,St
 
 ## Autor
 
-- Jméno: [Tvé jméno]
-- Kontakt: [Tvůj email]
+- Jméno: Petr Novotný
+- Kontakt: hornstr@seznam.cz
 
 ---
 
-Tento **README.md** by měl poskytnout uživatelům všechny základní informace o tom, jak skript používat, jaké argumenty musí zadat a co mohou očekávat jako výstup.
