@@ -1,4 +1,4 @@
-# Web Scraper pro volby do PS z webu volby.cz
+# Web Scraper pro volby do Poslanecké sněmovny z roku 2017 z webu volby.cz
 
 Tento Python skript slouží k získání výsledků voleb z webu volby.cz a ukládání těchto výsledků do CSV souboru. Skript stahuje data o voličích, vydaných obálkách, platných hlasech a jednotlivých stranách zadaného územního celku.
 
