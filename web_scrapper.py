@@ -31,16 +31,13 @@ def zkontroluj_adresu_a_obsah(adresa):
         if response.status_code != 200:
             print(f"\nDošlo k chybě. Stránka vrátila status code {response.status_code}\n")
             sys.exit(1)
-
         elif "page not found" in parsed.get_text().lower():
             print('\nDošlo k chybě. Zadaná stránka nebyla nalezena. Prosím zkontroluj vloženou adresu.\n')
             sys.exit(1)
-
         # Kontrola, zda stránka obsahuje očekávaný <td> element s class "cislo" a headers "sa1 sb1"
         elif not parsed.find('td',{'class':'cislo'}):
             print("\nDošlo k chybě. Stránka neobsahuje očekávaná data nebo strukturu.\n")
             sys.exit(1)
-
         else:
             print(f'\nPřipojení na adresu proběhlo úspěšně!\n')
 
@@ -85,11 +82,11 @@ def zpracovani_stranky(adresa, prvni_cast_adresy):
     for index, (td, obec) in enumerate(zip(td_tagy, nazev_obce), 1):
         # Výpočet procent dokončení
         percent_done = (index / total_okrsky) * 100
-        print(f"\rZpracováno {percent_done} % okrsků", end='', flush=True)
+        print(f"\rZpracováno {int(percent_done)} % okrsků", end='', flush=True)
 
         a_tag = td.find('a')
-        nazev_okrsku = obec.text if obec else 'Neznámý okrsek'
-        cislo_okrsku = td.text if td else 'Neznámé číslo'
+        nazev_okrsku = obec.text
+        cislo_okrsku = td.text
 
         if a_tag:
             href = a_tag.get('href')
