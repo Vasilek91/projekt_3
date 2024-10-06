@@ -9,10 +9,6 @@ Tento projekt je vytvořen v rámci **Engeto Online Python Akademie**. Cílem pr
 - **Email**: hornstr@seznam.cz
 - **Discord**: vasilek91_82724
 
-## Použité technologie
-- Python 3
-- Knihovny: `requests`, `BeautifulSoup` (z `bs4`), `urllib.parse`, `re`, `csv`, `sys`
-
 ## Instalace
 Před spuštěním skriptu je třeba nainstalovat potřebné balíčky. Můžete je nainstalovat pomocí následujícího příkazu:
 
