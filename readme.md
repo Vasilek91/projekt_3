@@ -19,6 +19,10 @@ pip install -r requirements.txt
 Seznam požadovaných knihoven:
 - `requests`
 - `beautifulsoup4`
+- `urllib.parse`
+- `re`
+- `csv`
+- `sys`
 
 ## Použití
 Skript se spouští z příkazové řádky s následujícími argumenty:
