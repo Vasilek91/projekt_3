@@ -85,7 +85,7 @@ def zpracovani_stranky(adresa, prvni_cast_adresy):
     for index, (td, obec) in enumerate(zip(td_tagy, nazev_obce), 1):
         # Výpočet procent dokončení
         percent_done = (index / total_okrsky) * 100
-        print(f"\rZpracováno {percent_done:.0f} % okrsků", end='', flush=True)
+        print(f"\rZpracováno {percent_done} % okrsků", end='', flush=True)
 
         a_tag = td.find('a')
         nazev_okrsku = obec.text if obec else 'Neznámý okrsek'
