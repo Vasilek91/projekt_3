@@ -9,17 +9,16 @@ Tento projekt je vytvořen v rámci **Engeto Online Python Akademie**. Cílem pr
 - **Email**: hornstr@seznam.cz
 - **Discord**: vasilek91_82724
 
-## Použité technologie
-- Python 3
-- Knihovny: `requests`, `BeautifulSoup` (z `bs4`), `urllib.parse`, `re`, `csv`, `sys`
-
 ## Instalace
 Před spuštěním skriptu je třeba nainstalovat potřebné balíčky. Pro jejich instalaci vytvořte soubor `requirements.txt` se seznamem potřebných knihoven:
 
-```txt
-requests
-beautifulsoup4
-```
+Seznam požadovaných knihoven:
+- `requests`
+- `beautifulsoup4`
+- `urllib.parse`
+- `re`
+- `csv`
+- `sys`
 
 Následně spustíte příkaz:
 
@@ -54,15 +53,6 @@ Po spuštění skriptu se výstupní soubor `vysledky_stredocesky.csv` naplní v
 - Hlasy pro jednotlivé politické strany
 
 ### Ukázka výpisu výsledků
-Po spuštění skriptu se v terminálu postupně zobrazuje stav zpracování okrsků:
-
-```
-Zpracováno 25 % okrsků
-Zpracováno 50 % okrsků
-Zpracováno 75 % okrsků
-Zpracováno 100 % okrsků
-```
-
 Po dokončení se vygeneruje soubor `vysledky_stredocesky.csv`, který bude obsahovat strukturovaná data, například takto:
 
 | cislo_okrsku | nazev_okrsku | volici | vydane_obalky | platne_hlasy | Strana A | Strana B |
@@ -70,6 +60,3 @@ Po dokončení se vygeneruje soubor `vysledky_stredocesky.csv`, který bude obsa
 | 1            | Okrsek 1     | 500    | 450           | 440          | 200      | 240      |
 | 2            | Okrsek 2     | 300    | 280           | 270          | 120      | 150      |
 | ...          | ...          | ...    | ...           | ...          | ...      | ...      |
-
-## Licence
-Tento projekt je licencován pod licencí MIT.
