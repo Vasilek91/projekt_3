@@ -35,7 +35,7 @@ python web_scraper.py <URL_územního_celku> <výstupní_soubor.csv>
 ```
 
 - `<URL_územního_celku>`: URL odkazující na územní celek z volební stránky volby.cz (např. „https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=3&xnumnuts=5103“).
-- `<výstupní_soubor.csv>`: Název souboru, do kterého budou uloženy výsledky voleb (např. „vysledky.csv“).
+- `<výstupní_soubor.csv>`: Název souboru, do kterého budou uloženy výsledky voleb (např. „vysledky.csv“). Skrpit zkontroluje způsobilost zadaného názvu.
 
 ### Příklad spuštění
 Pro ukázku si vezmeme konkrétní odkaz na výsledky voleb pro část Středočeského kraje:
