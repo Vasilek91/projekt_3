@@ -31,7 +31,7 @@ python <python_script> <URL_územního_celku> <výstupní_soubor.csv>
 
 ### Příklad spuštění
 ```bash
-python projekt_3.py https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=3&xnumnuts=5103 vysledky.csv
+python web_scraper.py https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=3&xnumnuts=5103 vysledky.csv
 ```
 
 ## Ověření a zpracování vstupních dat
@@ -45,6 +45,3 @@ Skript zpracovává zadanou stránku, získává výsledky voleb a ukládá je d
 - Název okrsku
 - Počet voličů, vydaných obálek a platných hlasů
 - Hlasy pro jednotlivé strany v každém okrsku
-
-## Licence
-Tento projekt je licencován pod licencí MIT.
