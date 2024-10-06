@@ -11,8 +11,6 @@ from urllib.parse import urljoin
 import re
 import csv
 import sys
-import time
-import threading
 
 # Vstupní argumenty
 adresa = sys.argv[1]  # První argument: URL územního celku
