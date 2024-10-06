@@ -7,65 +7,94 @@ import sys
 import time
 import threading
 
-vysledky = []
-
+# Vstupní argumenty
 adresa = sys.argv[1]  # První argument: URL územního celku
 soubor = sys.argv[2]  # Druhý argument: Jméno výstupního souboru
+prvni_cast_adresy = adresa[0:adresa.find('nss') + 4]
 
-# Funkce, která bude zobrazovat tečky během stahování dat
-def tecky_efekt():
-    while not dokoncen_stahovani:
-        for i in range(3):
-            if dokoncen_stahovani:
-                break
-            print('.', end='', flush=True)
-            time.sleep(0.5)
-        if not dokoncen_stahovani:
-            print('\r   \r', end='', flush=True)  # Smazání teček před dalším cyklem
 
-# Flag pro dokončení stahování
-dokoncen_stahovani = False
+# Kontrola připojení a validace stránky
+def zkontroluj_adresu_a_obsah(adresa):
+    if not adresa.startswith('https://www.volby.cz/pls/ps2017nss/ps32'):
+        print(f'\nDošlo k chybě. Prosím zkontroluj vloženou adresu, zda odpovídá požadavku uvedenému v README.\n')
+        sys.exit(1)
 
-# Zkontrolujeme, jestli je adresa dostupná
-test_pripojeni = r.get(adresa)
-if test_pripojeni.status_code != 200:
-    print(f'Zadaná adresa není dostupná. Kód chyby {test_pripojeni.status_code}')
-    sys.exit()
-else:
-    print(f'Připojení proběhlo úspěšně, stahuji data z adresy: {adresa}. \nČekejte prosím\n', end='', flush=True)
+    try:
+        response = r.get(adresa)
+        parsed = bs(response.text, 'html.parser')
 
-    # Spuštění vlákna pro tečky
-    vlakno = threading.Thread(target=tecky_efekt)
-    vlakno.start()
+        if response.status_code != 200:
+            print(f"\nDošlo k chybě. Stránka vrátila status code {response.status_code}\n")
+            sys.exit(1)
 
-try:
-    # Získání první části adresy
-    prvni_cast_adresy = adresa[0:adresa.find('nss') + 4]
+        elif "page not found" in parsed.get_text().lower():
+            print('\nDošlo k chybě. Zadaná stránka nebyla nalezena. Prosím zkontroluj vloženou adresu.\n')
+            sys.exit(1)
 
-    # Načtení HTML obsahu
+        # Kontrola, zda stránka obsahuje očekávaný <td> element s class "cislo" a headers "sa1 sb1"
+        elif not parsed.find('td',{'class':'cislo'}):
+            print("\nDošlo k chybě. Stránka neobsahuje očekávaná data nebo strukturu.\n")
+            sys.exit(1)
+
+        else:
+            print(f'\nPřipojení na adresu proběhlo úspěšně!\n')
+
+    except r.exceptions.RequestException as e:
+        print(f"\nDošlo k chybě. Chyba při pokusu o připojení: {e}\n")
+        sys.exit(1)
+
+# Kontrola názvu souboru
+def kontrola_nazvu_souboru(soubor):
+    if any(char in soubor for char in '\\/:*?"<>|'):
+        print(f'\nProsím nepoužívejte nepovolené znaky \'\\/:*?"<>|\' \n')
+        sys.exit(1)
+    elif not soubor.endswith('csv'):
+        print(f'\nUvedl jsi nesprávný formát výstupního souboru. Uveď prosím název s koncovkou .csv.\n')
+        sys.exit(1)
+
+# Funkce pro zápis výsledků do souboru
+def zapis_vysledku(soubor, vysledky):
+    zahlavi = vysledky[0].keys()
+
+    # Zápis do CSV souboru
+    with open(soubor, mode='w', newline='', encoding='utf-8') as nove_csv:
+        zapisovac = csv.DictWriter(nove_csv, fieldnames=zahlavi)
+        zapisovac.writeheader()
+        zapisovac.writerows(vysledky)
+    print(f"\n\nData byla uložena do souboru {soubor}.\n")
+
+# Zpracování stránky
+def zpracovani_stranky(adresa, prvni_cast_adresy):
+    vysledky = []
+
     html_adresy = r.get(adresa).text
     parsed_html = bs(html_adresy, 'html.parser')
 
     # Zpracování HTML
     td_tagy = parsed_html.find_all('td', {'class': 'cislo'})
-    nazev_obce = parsed_html.find_all('td', {'class': 'overflow_name'})  # Najde název obce
+    nazev_obce = parsed_html.find_all('td', {'class': 'overflow_name'})
 
-    for td, obec in zip(td_tagy, nazev_obce):
-        a_tag = td.find('a')  # Najdeme tag <a> přímo
-        nazev_okrsku = obec.text  # Najdu jmeno obce
-        cislo_okrsku = td.text
+    # Počítadlo okrsků pro zpětnou vazbu
+    total_okrsky = len(td_tagy)
+
+    for index, (td, obec) in enumerate(zip(td_tagy, nazev_obce), 1):
+        # Výpočet procent dokončení
+        percent_done = (index / total_okrsky) * 100
+        print(f"\rZpracováno {percent_done:.0f} % okrsků", end='', flush=True)
+
+        a_tag = td.find('a')
+        nazev_okrsku = obec.text if obec else 'Neznámý okrsek'
+        cislo_okrsku = td.text if td else 'Neznámé číslo'
 
         if a_tag:
-            href = a_tag.get('href')  # Získáme href přímo
+            href = a_tag.get('href')
             if href:
-                odkazy_okrsku = urljoin(prvni_cast_adresy, href)  # Vytvoříme plnou URL
+                odkazy_okrsku = urljoin(prvni_cast_adresy, href)
                 adresa_okrsku = r.get(odkazy_okrsku).text
-
                 parsed_okrsku = bs(adresa_okrsku, 'html.parser')
                 tabulka_okrsku = parsed_okrsku.find_all('td', {'headers': re.compile('^sa(2|3|6)$')})
 
                 volici_okrsku, obalky_okrsku, platne_hlasy = [td.text for td in tabulka_okrsku]
-
                 tabulka_stran = parsed_okrsku.find_all('td', {'headers': re.compile(r'^t\d+sb(2|3)$')})
 
                 vysledek = {
@@ -81,20 +110,16 @@ try:
                     hlasy = tabulka_stran[i + 1].text.strip()
                     vysledek[strana] = hlasy
 
-                vysledky.append(vysledek)
+                vysledky.append(vysledek)             
+    return vysledky
 
-    # Získání záhlaví pro CSV
-    zahlavi = vysledky[0].keys()
+# Kontrola vstupů
+zkontroluj_adresu_a_obsah(adresa)
+kontrola_nazvu_souboru(soubor)
 
-    # Zápis do CSV souboru
-    with open(soubor, mode='w', newline='', encoding='utf-8') as nove_csv:
-        zapisovac = csv.DictWriter(nove_csv, fieldnames=zahlavi)
-        zapisovac.writeheader()
-        zapisovac.writerows(vysledky)
+# Zpracování stránky a získání výsledků
+vysledky = zpracovani_stranky(adresa, prvni_cast_adresy)
 
-finally:
-    # Zastavíme zobrazování teček, když je stahování dokončeno
-    dokoncen_stahovani = True
-    vlakno.join()  # Počkáme na dokončení vlákna
+# Zápis do CSV
+zapis_vysledku(soubor, vysledky)
 
-print(f"\nData byla uložena do souboru {soubor}.")
