@@ -23,7 +23,7 @@ Seznam požadovaných knihoven:
 ## Použití
 Skript se spouští z příkazové řádky s následujícími argumenty:
 ```bash
-python projekt_3.py <URL_územního_celku> <výstupní_soubor.csv>
+python <python_script> <URL_územního_celku> <výstupní_soubor.csv>
 ```
 
 - `<URL_územního_celku>`: URL odkazující na územní celek z volební stránky volby.cz (např. „https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=3&xnumnuts=5103“).
