@@ -1,3 +1,10 @@
+"""
+projekt_3.py: třetí projekt do Engeto Online Python Akademie
+author: Petr Novotný
+email: hornstr@seznam.cz
+discord: vasilek91_82724
+"""
+
 import requests as r
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
