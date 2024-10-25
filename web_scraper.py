@@ -65,18 +65,13 @@ def zapis_vysledku(soubor, vysledky):
         zapisovac.writerows(vysledky)
     print(f"\n\nData byla uložena do souboru {soubor}.\n")
 
-def stahni_stranku(adresa):
-    html_adresy = r.get(adresa).text
-    parsed_html = bs(html_adresy, 'html.parser')    
-
-
 # Zpracování okrsku
 def zpracuj_okrsek(td, obec, prvni_cast_adresy):
     a_tag = td.find('a')
     nazev_okrsku = obec.text
     cislo_okrsku = td.text
 
-    if a_tag:
+    if a_tag: # Když existuje odkaz 
         href = a_tag.get('href')
         if href:
             odkazy_okrsku = urljoin(prvni_cast_adresy, href)
@@ -131,14 +126,19 @@ def zpracovani_stranky(adresa, prvni_cast_adresy):
     vysledky = zpracuj_vsechny_okrsky(td_tagy, nazev_obce, prvni_cast_adresy)
     return vysledky
 
+# Hlavní funkce programu
+def main(adresa, soubor):
+    # Kontrola vstupů
+    zkontroluj_adresu_a_obsah(adresa)
+    kontrola_nazvu_souboru(soubor)
 
-# Kontrola vstupů
-zkontroluj_adresu_a_obsah(adresa)
-kontrola_nazvu_souboru(soubor)
+    # Zpracování stránky a získání výsledků
+    vysledky = zpracovani_stranky(adresa, prvni_cast_adresy)
 
-# Zpracování stránky a získání výsledků
-vysledky = zpracovani_stranky(adresa, prvni_cast_adresy)
+    # Zápis do CSV
+    zapis_vysledku(soubor, vysledky)
 
-# Zápis do CSV
-zapis_vysledku(soubor, vysledky)
+# Spuštění programu
+if __name__ == "__main__":
+    main(adresa, soubor)
 
