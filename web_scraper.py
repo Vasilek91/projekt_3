@@ -2,7 +2,7 @@
 projekt_3.py: třetí projekt do Engeto Online Python Akademie
 author: Petr Novotný
 email: hornstr@seznam.cz
-discord: vasilek91_82724
+discord: ztratil jsem přístup
 """
 
 import requests as r
@@ -71,7 +71,7 @@ def zpracuj_okrsek(td, obec, prvni_cast_adresy):
     nazev_okrsku = obec.text
     cislo_okrsku = td.text
 
-    if a_tag: # Když existuje odkaz 
+    if a_tag: 
         href = a_tag.get('href')
         if href:
             odkazy_okrsku = urljoin(prvni_cast_adresy, href)
